@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematical Tables Collection</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #4a5568;
+            margin-bottom: 40px;
+            font-size: 3em;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .tab-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .tab-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tab-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .tab-btn:hover::before {
+            left: 100%;
+        }
+        
+        .tab-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .tab-btn.active {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+        }
+        
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 3px solid transparent;
+            background-clip: padding-box;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffeaa7, #fd79a8);
+            background-size: 400% 400%;
+            animation: gradientFlow 10s ease infinite;
+            z-index: -1;
+            margin: -3px;
+            border-radius: 20px;
+        }
+        
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 100% 50%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 0% 100%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .card:hover {
+            transform: translateY(-8px) rotate(1deg);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-align: center;
+            padding: 18px;
+            margin: -25px -25px 25px -25px;
+            border-radius: 20px 20px 0 0;
+            font-size: 1.3em;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .equation-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            margin: 8px 0;
+            border-radius: 12px;
+            font-size: 1.2em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            background: linear-gradient(90deg, #f8f9fa, #e9ecef);
+            border-left: 4px solid transparent;
+        }
+        
+        .equation-row:hover {
+            background: linear-gradient(90deg, #e3f2fd, #bbdefb);
+            transform: translateX(8px);
+            border-left: 4px solid #2196f3;
+        }
+        
+        .equation-row:nth-child(even) {
+            background: linear-gradient(90deg, #f1f8e9, #dcedc8);
+        }
+        
+        .equation-row:nth-child(even):hover {
+            background: linear-gradient(90deg, #e8f5e8, #c8e6c8);
+            border-left: 4px solid #4caf50;
+        }
+        
+        .single-equation {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 25px;
+            font-size: 1.5em;
+            font-weight: bold;
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .single-equation:hover {
+            background: linear-gradient(45deg, #e3f2fd, #bbdefb);
+            transform: scale(1.05);
+        }
+        
+        .number {
+            color: #5a67d8;
+            font-weight: bold;
+        }
+        
+        .operator {
+            color: #38a169;
+            font-weight: bold;
+            margin: 0 8px;
+        }
+        
+        .result {
+            color: #d53f8c;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.2em;
+            }
+            
+            .container {
+                padding: 25px;
+                margin: 10px;
+            }
+            
+            .tab-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .tab-btn {
+                width: 80%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔢 Mathematical Tables Collection 🔢</h1>
+        
+        <div class="tab-container">
+            <button class="tab-btn active" onclick="showSection('multiplication')">
+                📊 Multiplication Tables (11-19)
+            </button>
+            <button class="tab-btn" onclick="showSection('squares')">
+                🔲 Squares (11-35)
+            </button>
+            <button class="tab-btn" onclick="showSection('cubes')">
+                🧊 Cubes (1-20)
+            </button>
+        </div>
+        
+        <div id="multiplication" class="content-section active">
+            <div class="grid" id="multiplicationGrid"></div>
+        </div>
+        
+        <div id="squares" class="content-section">
+            <div class="grid" id="squaresGrid"></div>
+        </div>
+        
+        <div id="cubes" class="content-section">
+            <div class="grid" id="cubesGrid"></div>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab-btn').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName).classList.add('active');
+            
+            // Activate clicked tab
+            event.target.classList.add('active');
+        }
+        
+        function createMultiplicationCard(number) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            
+            const header = document.createElement('div');
+            header.className = 'card-header';
+            header.textContent = `Table of ${number}`;
+            card.appendChild(header);
+            
+            for (let i = 1; i <= 10; i++) {
+                const row = document.createElement('div');
+                row.className = 'equation-row';
+                
+                const result = number * i;
+                row.innerHTML = `
+                    <span><span class="number">${number}</span> × <span class="number">${i}</span></span>
+                    <span class="operator">=</span>
+                    <span class="result">${result}</span>
+                `;
+                
+                card.appendChild(row);
+            }
+            
+            return card;
+        }
+        
+        function createSquareCard(number) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            
+            const header = document.createElement('div');
+            header.className = 'card-header';
+            header.textContent = `Square of ${number}`;
+            card.appendChild(header);
+            
+            const equation = document.createElement('div');
+            equation.className = 'single-equation';
+            
+            const result = number * number;
+            equation.innerHTML = `
+                <span class="number">${number}</span><sup>2</sup>
+                <span class="operator">=</span>
+                <span class="result">${result}</span>
+            `;
+            
+            card.appendChild(equation);
+            return card;
+        }
+        
+        function createCubeCard(number) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            
+            const header = document.createElement('div');
+            header.className = 'card-header';
+            header.textContent = `Cube of ${number}`;
+            card.appendChild(header);
+            
+            const equation = document.createElement('div');
+            equation.className = 'single-equation';
+            
+            const result = number * number * number;
+            equation.innerHTML = `
+                <span class="number">${number}</span><sup>3</sup>
+                <span class="operator">=</span>
+                <span class="result">${result}</span>
+            `;
+            
+            card.appendChild(equation);
+            return card;
+        }
+        
+        function generateAllContent() {
+            // Generate multiplication tables (11-19)
+            const multiGrid = document.getElementById('multiplicationGrid');
+            for (let i = 11; i <= 19; i++) {
+                multiGrid.appendChild(createMultiplicationCard(i));
+            }
+            
+            // Generate squares (11-35)
+            const squareGrid = document.getElementById('squaresGrid');
+            for (let i = 11; i <= 35; i++) {
+                squareGrid.appendChild(createSquareCard(i));
+            }
+            
+            // Generate cubes (1-20)
+            const cubeGrid = document.getElementById('cubesGrid');
+            for (let i = 1; i <= 20; i++) {
+                cubeGrid.appendChild(createCubeCard(i));
+            }
+        }
+        
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            generateAllContent();
+        });
+    </script>
+</body>
+</html>
